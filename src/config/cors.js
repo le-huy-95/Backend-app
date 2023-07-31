@@ -7,7 +7,7 @@ const configCors = (app) => {
     app.use(function (req, res, next) {
         // console.log(req.method, req.headers.origin)
         // Website you wish to allow to connect
-        res.setHeader('Access-Control-Allow-Origin', 'https://le-huy-95.github.io/huyle-app-fontend/');
+        res.setHeader('Access-Control-Allow-Origin', 'https://le-huy-95.github.io/');
 
         // Request methods you wish to allow
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');

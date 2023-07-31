@@ -19,7 +19,7 @@ const limiter = rateLimit({
 
 
 const AuthApi = (app) => {
-    // router.all('*', checkUserJwt, checkUserPermission);
+    router.all('*', checkUserJwt, checkUserPermission);
 
     router.get("/test-api", apiController.TestApi);
     router.post("/register", apiController.HandleRegister);

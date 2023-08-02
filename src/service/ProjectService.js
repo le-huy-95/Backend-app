@@ -961,7 +961,7 @@ const createWarehouseProduct = async (data) => {
                 product: data.Product,
                 product_number: data.Number,
                 product_cost: data.Product_Prince,
-                productstatuss_id: data.productstatuss_id > 0 ? data.productstatuss_id : 1,
+                productstatuss_id: data.product_statusId > 0 ? data.product_statusId : 1,
                 Suppliers: data.Suppliers,
                 unit: data.unit,
                 unitMoney: data.unitMoney,
@@ -1002,11 +1002,11 @@ const updateProductInWarehouse = async (data) => {
         })
 
         if (Warehouse) {
-            await Warehouse.update({
+            await db.Warehouses.update({
                 product: data.Product,
                 product_number: data.Number,
                 product_cost: data.Product_Prince,
-                productstatuss_id: data.productstatuss_id,
+                productstatuss_id: data.product_statusId,
                 Suppliers: data.Suppliers,
                 unit: data.unit,
                 unitMoney: data.unitMoney,
@@ -1014,7 +1014,12 @@ const updateProductInWarehouse = async (data) => {
                 Suppliers_phone: data.Suppliers_phone,
                 image: data.image
 
-            })
+            },
+                {
+                    where: { id: data.id },
+
+                }
+            )
             return {
                 EM: " Update Warehouse Success",
                 EC: "0",
@@ -1029,6 +1034,7 @@ const updateProductInWarehouse = async (data) => {
 
         }
     } catch (error) {
+        console.log("error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -1037,7 +1043,7 @@ const updateProductInWarehouse = async (data) => {
     }
 }
 const updateNumberProductInWarehouse = async (id, number) => {
-    console.log("id, number", id, number)
+    console.log("id, number-1046", id, number)
     try {
         if (!+id) {
 
@@ -1474,26 +1480,30 @@ const CreateImageInWarehouse = async (image, Product, Product_Prince, Number, Su
     }
 
 }
-const UpdateImageInWarehouse = async (id, image, Product, Product_Prince, Number, Suppliers, unit, unitMoney, Suppliers_address, productstatuss_id, createdBy, Suppliers_phone) => {
+const UpdateImageInWarehouse = async (id, image, Product, Product_Prince, Number, Suppliers, unit, unitMoney, Suppliers_address, product_statusId, createdBy, Suppliers_phone) => {
     try {
         let Warehouse = await db.Warehouses.findOne({
-            where: { id: id },
+            where: { id: +id },
         })
-
         if (Warehouse) {
-            await Warehouse.update({
-                product: Product,
-                product_number: Number,
-                product_cost: Product_Prince,
-                productstatuss_id: productstatuss_id,
-                Suppliers: Suppliers,
-                unit: unit,
-                unitMoney: unitMoney,
-                Suppliers_address: Suppliers_address,
-                Suppliers_phone: Suppliers_phone,
-                image: image,
-                createdBy: createdBy
-            })
+            await db.Warehouses.update(
+                {
+                    product: Product,
+                    product_number: Number,
+                    product_cost: Product_Prince,
+                    productstatuss_id: product_statusId,
+                    Suppliers: Suppliers,
+                    unit: unit,
+                    unitMoney: unitMoney,
+                    Suppliers_address: Suppliers_address,
+                    Suppliers_phone: Suppliers_phone,
+                    image: image,
+                    createdBy: createdBy
+                },
+                {
+                    where: { id: Warehouse.id },
+                }
+            )
             return {
                 EM: "update  ok",
                 EC: "0",
@@ -2266,7 +2276,7 @@ const getAllProjectWithPaginationWithEmployerPickup = async (page, limit, unit, 
         }
 
     } catch (error) {
-
+        console.log("error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -2279,7 +2289,7 @@ const getAllProjectWithPaginationWithEmployerWithUsername = async (unit, Usernam
 
         let data = await db.Projects.findAll({
             where: {
-                shippingunit_id: +unit, User_PickUp: Username, Number_PickUp: Phone, statuspickup_id: 1
+                shippingunit_id: unit, User_PickUp: Username, Number_PickUp: Phone, statuspickup_id: 1
             },
             include: [
                 {
@@ -3790,7 +3800,7 @@ const getAllProjectWithPaginationWithEmployerOverview = async (page, limit, unit
                 where: {
                     shippingunit_id: +unit, statusdelivery_id: 2
                 },
-                distinct: true,
+                raw: true,
                 nest: true,
                 include: [
                     {
@@ -3830,10 +3840,7 @@ const getAllProjectWithPaginationWithEmployerOverview = async (page, limit, unit
                         model: db.Statuspickups,
 
                     },
-                    {
-                        model: db.Statuspickups,
 
-                    },
                     {
                         model: db.Statuswarehouses,
 
@@ -3888,10 +3895,10 @@ const getAllProjectWithPaginationWithEmployerOverview = async (page, limit, unit
 }
 const getAllProjectWithPaginationWithEmployerOverviewWithUsername = async (unit, Username, Phone) => {
     try {
-
+        console.log("unit, Username, Phone 3898", unit, Username, Phone)
         let data = await db.Projects.findAll({
             where: {
-                shippingunit_id: +unit, User_Overview: Username, Number_Overview: Phone, receiveMoneyId: 1
+                shippingunit_id: +unit, User_Overview: Username, Number_Overview: Phone, statusreceivedmoney_id: 1
             },
             include: [
                 {
@@ -3946,13 +3953,11 @@ const getAllProjectWithPaginationWithEmployerOverviewWithUsername = async (unit,
                     model: db.Addresswards,
 
                 },
-                {
-                    model: db.Images,
-                    through: { attributes: [] }
 
-                }
 
             ],
+            raw: true,
+            nest: true
 
         })
         if (data) {
@@ -3988,14 +3993,20 @@ const updateProjectWithEmployerOverview = async (item) => {
         })
 
         if (abc) {
-            await abc.update({
-                User_Overview: item.User_Overview,
-                Number_Overview: item.Number_Overview,
-                receiveMoneyId: +item.receiveMoneyId,
-                Overview_time: item.Overview_time,
-                OverviewDone_time: item.OverviewDone_time,
-                done_status: item.done_status
-            })
+            await db.Projects.update(
+                {
+                    User_Overview: item.User_Overview,
+                    Number_Overview: item.Number_Overview,
+                    statusreceivedmoney_id: +item.receiveMoneyId,
+                    Overview_time: item.Overview_time,
+                    OverviewDone_time: item.OverviewDone_time,
+                    done_status: item.done_status
+                },
+                {
+                    where: { shippingunit_id: +item.unitId, id: +item.id }
+                }
+
+            )
 
             return {
                 EM: "Update  Success",
@@ -4189,6 +4200,7 @@ const hashPassWord = (passwordInput) => {
     return bcrypt.hashSync(passwordInput, salt);
 }
 const UpdatePassWord = async (data) => {
+    console.log("data", data)
     try {
         let user = await db.Users.findOne({
             where: { phone: data.phone }
@@ -4204,10 +4216,16 @@ const UpdatePassWord = async (data) => {
                         DT: "",
                     }
                 } else {
-                    await user.update({
+                    await db.Users.update({
                         password: hashPass
 
-                    })
+                    },
+                        {
+                            where: { phone: data.phone }
+
+                        }
+
+                    )
                     return {
                         EM: "Update Success",
                         EC: "0",

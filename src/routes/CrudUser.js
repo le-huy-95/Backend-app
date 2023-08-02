@@ -12,9 +12,9 @@ const CrudUser = (app) => {
 
     // router.all('*', checkUserJwt, checkUserPermission);
     router.get("/user/show", crudUser.show);
-    router.post("/user/create", crudUser.create);
+    router.post("/user/create", checkUserJwt, checkUserPermission, crudUser.create);
     router.put("/user/update", crudUser.update);
-    router.delete("/user/delete", crudUser.remove);
+    router.delete("/user/delete", checkUserJwt, checkUserPermission, crudUser.remove);
     router.get("/group/show", groupController.showGroup);
     router.get("/user/search", crudUser.showDataBySearch);
     router.get("/user/show/search/byGroup", crudUser.showUserbyGroup);

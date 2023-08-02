@@ -10,13 +10,13 @@ const router = express.Router();
 
 const RoleApi = (app) => {
     // router.all('*', checkUserJwt, checkUserPermission);
-    router.get("/ShowAllRoleWithPagination", RoleController.ShowAllRole);
-    router.get("/showRole", RoleController.showRole);
+    router.get("/ShowAllRoleWithPagination", checkUserJwt, checkUserPermission, RoleController.ShowAllRole);
+    router.get("/showRole", checkUserJwt, checkUserPermission, RoleController.showRole);
     router.get("/role/by-group/:groupId", RoleController.getRoleByGroup);
-    router.post("/role/assign-to-group", RoleController.assignToGroup);
-    router.post("/AddRow", RoleController.AddRole);
-    router.delete("/DeleteRow", RoleController.DeleteRole);
-    router.put("/updateRow", RoleController.UpdateRole);
+    router.post("/role/assign-to-group", checkUserJwt, checkUserPermission, RoleController.assignToGroup);
+    router.post("/AddRow", checkUserJwt, checkUserPermission, RoleController.AddRole);
+    router.delete("/DeleteRow", checkUserJwt, checkUserPermission, RoleController.DeleteRole);
+    router.put("/updateRow", checkUserJwt, checkUserPermission, RoleController.UpdateRole);
 
 
 

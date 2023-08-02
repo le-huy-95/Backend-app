@@ -10,7 +10,7 @@ const router = express.Router();
 
 const ProjectApi = (app) => {
 
-    // router.all('*', checkUserJwt, checkUserPermission);
+    router.all('*', checkUserJwt, checkUserPermission);
     router.get("/getProject", projectController.showAllProject);
     router.get("/getProjects/:id", projectController.showProject);
     router.post("/add-project-to-user", projectController.addProjectToUser);

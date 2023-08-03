@@ -145,7 +145,6 @@ const getUserWithPagination = async (page, limit) => {
         }
 
     } catch (error) {
-        console.log("error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -191,7 +190,7 @@ const createUser = async (data) => {
                 wardcustomer_id: data.wardcustomer_id,
                 addressDetail: data.addressDetail,
                 Position: data.Position ? data.Position : "",
-                shippingunit_id: data.shippingUnit_id ? data.shippingUnit_id : "0"
+                shippingunit_id: data.shippingunit_id ? data.shippingunit_id : "0"
 
             })
             return {
@@ -215,7 +214,7 @@ const createUser = async (data) => {
                 wardcustomer_id: data.districtcustomer_id,
                 addressDetail: data.addressDetail,
                 Position: data.Position ? data.Position : "",
-                shippingunit_id: data.shippingUnit_id ? data.shippingUnit_id : "0"
+                shippingunit_id: data.shippingunit_id ? data.shippingunit_id : "0"
 
             })
             return {
@@ -228,7 +227,6 @@ const createUser = async (data) => {
 
 
     } catch (error) {
-        console.log("error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -263,7 +261,7 @@ const updateUser = async (data) => {
                     districtcustomer_id: data.districtcustomer_id,
                     wardcustomer_id: data.wardcustomer_id,
                     Position: data.Position ? data.Position : "",
-                    shippingunit_id: data.shippingUnit_id ? data.shippingUnit_id : "0",
+                    shippingunit_id: data.shippingunit_id ? data.shippingunit_id : "0",
                 },
 
                 {
@@ -287,7 +285,6 @@ const updateUser = async (data) => {
 
 
     } catch (error) {
-        console.log("error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -308,7 +305,6 @@ const deleteUser = async (id) => {
         }
 
     } catch (error) {
-        console.log("error", error)
         return res.status(500).json({
             EM: "Error from Server",
             EC: "-1",

@@ -119,7 +119,6 @@ const getAllProjectWithPagination = async (page, limit, createBy) => {
         }
 
     } catch (error) {
-        console.log("error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -212,7 +211,6 @@ const getProjects = async (id) => {
 
 
     } catch (error) {
-        console.log("error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -230,7 +228,7 @@ const createProjects = async (data) => {
                 money: data.money,
                 statuspayment_id: data.StatusPaymentId,
                 shippingunit_id: data.shippingUnitId,
-                total: data.totalMoney,
+                total: data.total,
                 totalWithShippingCost: data.totalWithShippingCost,
                 From_address: data.From_address,
                 To_address: data.To_address,
@@ -326,7 +324,6 @@ const getAllStatusPayment = async () => {
     }
 }
 const updateProjectWithId = async (data) => {
-    console.log("data", data)
     try {
         if (!data) {
             return {
@@ -405,7 +402,6 @@ const RemoveProject = async (id) => {
 
         }
     } catch (error) {
-        console.log("error", error)
         return {
             EM: "Error from Server",
             EC: "-1",
@@ -443,7 +439,6 @@ const createChat = async (data) => {
 
 }
 const updateChat = async (data) => {
-    console.log("data-453", data)
     try {
         if (!data) {
             return {
@@ -469,7 +464,6 @@ const updateChat = async (data) => {
         }
 
     } catch (error) {
-        console.log("error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -515,7 +509,6 @@ const getDataSearch = async (text, phone) => {
                     },
                     {
                         model: db.Warehouses,
-                        attributes: ["product"],
                     },
                     {
                         model: db.Statuspayments,
@@ -533,12 +526,11 @@ const getDataSearch = async (text, phone) => {
 
         )
         if (text) {
-            console.log("Alldata", Alldata.length)
-            const AlldataSearch = Alldata.filter(item => item.total.includes(text) ||
-                item.name_customer.includes(text) ||
-                item.order.includes(text) ||
-                moment(`${item.createdAt}`).format("DD/MM/YYYY").includes(text) ||
-                item?.Warehouse?.product.includes(text)
+            const AlldataSearch = Alldata.filter(item => item?.total?.includes(text) ||
+                item?.name_customer?.includes(text) ||
+                item?.order?.includes(text) ||
+                moment(`${item?.createdAt}`).format("DD/MM/YYYY").includes(text) ||
+                item?.Warehouse?.product?.includes(text)
 
             )
             return {
@@ -607,7 +599,6 @@ const getDataSearchWithtime = async (startDate, endDate, phone) => {
             }
         }
         if (startDate === endDate) {
-            console.log("ProjectWithTimeDDXXYYYY", ProjectWithTimeDDXXYYYY)
             let data = ProjectWithTimeDDXXYYYY.filter(item => moment(`${item.createdAt}`).format("DD-MM-YYYY") === startDate)
             if (data) {
                 return {
@@ -731,7 +722,6 @@ const getAllProjectWithPaginationAndStatusPayment = async (page, limit, createBy
     }
 }
 const getAllProjectWithPaginationAndStatusDeliveryNull = async (page, limit, createBy, statusdeliveryId) => {
-    console.log("730", page, limit, createBy, statusdeliveryId)
     try {
         if (statusdeliveryId) {
             let offset = (page - 1) * limit;
@@ -832,7 +822,6 @@ const getAllProjectWithPaginationAndStatusDeliveryNull = async (page, limit, cre
 
 
     } catch (error) {
-        console.log("error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -924,7 +913,6 @@ const getAllwarehhouseWithPagination = async (page, limit, createdBy) => {
         }
 
     } catch (error) {
-        console.log("error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -1034,7 +1022,6 @@ const updateProductInWarehouse = async (data) => {
 
         }
     } catch (error) {
-        console.log("error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -1043,7 +1030,6 @@ const updateProductInWarehouse = async (data) => {
     }
 }
 const updateNumberProductInWarehouse = async (id, number) => {
-    console.log("id, number-1046", id, number)
     try {
         if (!+id) {
 
@@ -1515,7 +1501,6 @@ const UpdateImageInWarehouse = async (id, image, Product, Product_Prince, Number
 
 
     } catch (error) {
-        console.log(error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -1542,9 +1527,9 @@ const getAllDataProductDashboard = async (createdBy) => {
             let arr1 = []
             let sum = 0
             const allProduct = data.length
-            const doneStatus = data.filter(item => item.done_status === "1")
+            const doneStatus = data.filter(item => item.statusdelivery_id === 1)
             const notDoneStatus = data.filter(item => item.done_status === "0")
-            const cancelStatus = data.filter(item => item.done_status === "2")
+            const cancelStatus = data.filter(item => item.statusdelivery_id === 3)
 
             doneStatus.forEach((item) => {
                 sum += +item.total
@@ -1552,7 +1537,7 @@ const getAllDataProductDashboard = async (createdBy) => {
 
             const dataUser = _.countBy(data, 'phoneNumber_customer')
             let max_buy = Object.keys(dataUser).reduce(function (a, b) { return dataUser[a] > dataUser[b] ? a : b });
-            const dataProductId = _.countBy(data, 'ProductId')
+            const dataProductId = _.countBy(data, 'warehouse_id')
             let max_seller = Object.keys(dataProductId).reduce(function (a, b) { return dataProductId[a] > dataProductId[b] ? a : b });
             for (let i = 0; i < dataWarehouse.length; i++) {
                 if (dataWarehouse[i].id === +max_seller) {
@@ -1934,7 +1919,6 @@ const getAllProjectWithPaginationWithEmployer = async (page, limit, unit) => {
             }
         }
     } catch (error) {
-        console.log("error-1934", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -2032,7 +2016,6 @@ const getAllProjectWithPaginationWithEmployerWithFlag = async (unit) => {
     }
 }
 const updateProjectWithEmployerWithId = async (data) => {
-    console.log("data", data)
     try {
         if (!data.id) {
             return {
@@ -2276,7 +2259,6 @@ const getAllProjectWithPaginationWithEmployerPickup = async (page, limit, unit, 
         }
 
     } catch (error) {
-        console.log("error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -2372,7 +2354,6 @@ const getAllProjectWithPaginationWithEmployerWithUsername = async (unit, Usernam
     }
 }
 const updateProjectWithEmployerPickup = async (data) => {
-    console.log("data-2363", data)
     try {
         if (!data.id) {
             return {
@@ -2419,7 +2400,6 @@ const updateProjectWithEmployerPickup = async (data) => {
 
         }
     } catch (error) {
-        console.log("error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -2524,7 +2504,6 @@ const getAllProjectWithPaginationWithEmployerWarehouse = async (page, limit, uni
             }
         }
     } catch (error) {
-        console.log("2515", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -2610,7 +2589,6 @@ const getAllProjectWithPaginationWithEmployerWarehouseWithUsername = async (unit
 
 
     } catch (error) {
-        console.log(" error", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -2663,7 +2641,6 @@ const updateProjectWithEmployerWarehouse = async (item) => {
 
         }
     } catch (error) {
-        console.log(error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -2768,7 +2745,6 @@ const getAllProjectWithPaginationWithEmployerDelivery = async (page, limit, unit
             }
         }
     } catch (error) {
-        console.log("2759", error)
 
         return {
             EM: " Wrongs with services",
@@ -2856,7 +2832,6 @@ const getAllProjectWithPaginationWithEmployerDeliveryWithUsername = async (unit,
 
 
     } catch (error) {
-        console.log("2846", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -3469,7 +3444,6 @@ const showDataproductBySearchWithEmployer = async (data, positon, unit) => {
 
 
     } catch (error) {
-        console.log(error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -3776,7 +3750,6 @@ const getDataproductWithStatus = async (unit, statuspickupId, statuswarehouseId,
 
         }
     } catch (error) {
-        console.log(error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -3885,7 +3858,6 @@ const getAllProjectWithPaginationWithEmployerOverview = async (page, limit, unit
             }
         }
     } catch (error) {
-        console.log("3942", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -3895,7 +3867,6 @@ const getAllProjectWithPaginationWithEmployerOverview = async (page, limit, unit
 }
 const getAllProjectWithPaginationWithEmployerOverviewWithUsername = async (unit, Username, Phone) => {
     try {
-        console.log("unit, Username, Phone 3898", unit, Username, Phone)
         let data = await db.Projects.findAll({
             where: {
                 shippingunit_id: +unit, User_Overview: Username, Number_Overview: Phone, statusreceivedmoney_id: 1
@@ -4033,7 +4004,6 @@ const updateProjectWithEmployerOverview = async (item) => {
     }
 }
 const createNotification = async (data) => {
-    console.log("data", data)
     try {
         if (data) {
             let project = await db.Notifications.create({
@@ -4107,7 +4077,6 @@ const getshowAllNotification = async (unit, user) => {
 
 
     } catch (error) {
-        console.log("error-4147", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -4184,7 +4153,6 @@ const updateStatusNotification = async (data) => {
 
         }
     } catch (error) {
-        console.log("error-4158", error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -4200,7 +4168,6 @@ const hashPassWord = (passwordInput) => {
     return bcrypt.hashSync(passwordInput, salt);
 }
 const UpdatePassWord = async (data) => {
-    console.log("data", data)
     try {
         let user = await db.Users.findOne({
             where: { phone: data.phone }
@@ -4250,7 +4217,6 @@ const UpdatePassWord = async (data) => {
         }
 
     } catch (error) {
-        console.log(error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -4291,7 +4257,6 @@ const ResetPassWord = async (data) => {
         }
 
     } catch (error) {
-        console.log(error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -4335,7 +4300,6 @@ const updateNewPass = async (data) => {
 
 
     } catch (error) {
-        console.log(error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -4369,7 +4333,6 @@ const Check = async (item) => {
 
 
     } catch (error) {
-        console.log(error)
         return {
             EM: " Wrongs with services",
             EC: "1",
@@ -4405,7 +4368,6 @@ const UpdateNewImageChat = async (item) => {
 
 
     } catch (error) {
-        console.log(error)
         return {
             EM: " Wrongs with services",
             EC: "1",

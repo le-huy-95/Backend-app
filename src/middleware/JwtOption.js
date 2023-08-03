@@ -128,8 +128,9 @@ const checkUserPermission = (req, res, next) => {
         let role = req.user.groupWithRole
         let currentUrl = req.path;
         if (!role && role.lenghth === 0) {
+            // you don't have permission to access this page
             return res.status(403).json({
-                EM: "you don't have permission to access this page ",
+                EM: "Bạn không có quyền để thực hiện chức năng này ",
                 EC: "-1",
                 DT: ""
             })
@@ -139,7 +140,7 @@ const checkUserPermission = (req, res, next) => {
             next()
         } else {
             return res.status(403).json({
-                EM: "you don't have permission to access this page ",
+                EM: "Bạn không có quyền để thực hiện chức năng này ",
                 EC: "-1",
                 DT: ""
             })
